@@ -1,0 +1,111 @@
+.dark-theme {
+    background-color: #1a1a1a;
+    color: #dbdbdb;
+  }
+  
+.dark-theme .App-header {
+    background-color: #320948;
+  }
+
+.dark-theme .App-link {
+    color: #670b99;
+  }
+
+.dark-theme .note {
+    background-color: #1a1a1a;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+.dark-theme .theme-toggle-button {
+    padding: 8px 16px;
+    background-color: #670b99;
+    color: #dbdbdb;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+.dark-theme .theme-toggle-button:hover {
+    background-color: #47066a;
+  }
+
+.dark-theme .note-title {
+    background-color: #670b99;
+  }
+
+.dark-theme .note-content{
+    background-color: #670b99;
+}
+
+.dark-theme .note-content {
+    color: #dbdbdb;
+    background-color: #1a1a1a;
+}
+
+.dark-theme .profile-container {
+    background-color: #1a1a1a;
+}
+
+.dark-theme .modal-content {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Ombre légère */
+    background-color: #1a1a1a;
+}
+
+.dark-theme .modal input[type="text"],
+.modal textarea {
+  border: 2px solid #670b99;
+}
+
+.dark-theme .ajout button{
+  color: #000000;
+  background-color: #670b99;
+}
+
+.dark-theme .ajout{
+    background-color: #1a1a1a;
+    color: #dbdbdb;
+    border-radius: 4px;
+  }
+
+.dark-theme button:hover{
+  background-color: #47066a;
+}
+
+.dark-theme .modal button {
+    background-color: #670b99; 
+    color: #dbdbdb;
+
+  }
+  
+.dark-theme .modal button:hover {
+    background-color: #47066a; 
+  }
+
+.dark-theme .search-bar {
+    background-color: #670b99;
+  }
+
+.dark-theme .search-bar input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #dbdbdb;
+    border-radius: 5px;
+  }
+  
+.dark-theme .search-bar button {
+
+    background-color: #670b99;
+    color: #dbdbdb;
+  }
+  
+.dark-theme .search-bar button:hover {
+    background-color: #47066a;
+  }
+
+.dark-theme .highlight {
+    color: #47066a;
+  }
+  
