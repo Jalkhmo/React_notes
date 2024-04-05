@@ -4,6 +4,7 @@ import './AppB.css';
 import Note from "./Note";
 import Modal from "./Modal";
 import utils from "./utils"; // eslint-disable-line no-unused-vars
+import { handleDeleteNote } from "./utils";
 import SearchBar from "./SearchBar"; // eslint-disable-line no-unused-vars
 import ThemeToggleButton from "./ThemeToggleButton";
 import { fetchNotes, handleSearch, handleClearSearch, handleAddNote } from "./utils";
@@ -18,6 +19,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredNotes, setFilteredNotes] = useState([]);
   const [theme, setTheme] = useState('light');
+  
 
   useEffect(() => {
     fetchNotes(setNotes, setLoading);
@@ -42,18 +44,15 @@ function App() {
   const handleAddNoteClick = () => {
     handleAddNote(newNoteTitle, newNoteContent, setNotes, setShowModal, setNewNoteTitle, setNewNoteContent);
   };
-
-  const handleDeleteNote = () => {
-    handleDeleteNote(selectedNote, notes, setNotes, setShowModal);
-  }
-
+  
   const handleUpdateNote = () => {
-    handleUpdateNote(newNoteTitle, newNoteContent);
+    handleUpdateNote(selectedNote, newNoteTitle, newNoteContent, notes, setNotes, setShowModal);
   }
 
   return (
     <div className={`App ${theme === 'dark' ? 'dark-theme' : ''}`}>
       <header className="App-header">
+        <br />
         <div className="search-bar">
           <input
             type="text"
@@ -66,6 +65,19 @@ function App() {
           )}
           <button className="search-button" onClick={handleSearchClick}>Rechercher</button>
         </div>
+        <br />
+        <Modal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          selectedNote={selectedNote}
+          newNoteTitle={newNoteTitle}
+          newNoteContent={newNoteContent}
+          handleAddNote={handleAddNoteClick}
+          handleDeleteNote={handleDeleteNote}
+          handleUpdateNote={handleUpdateNote}
+        />
+        <ThemeToggleButton theme={theme} toggleTheme={toggleTheme} />
+      
         <div className="notes-container">
           {filteredNotes.map(note => (
             <Note
@@ -102,18 +114,7 @@ function App() {
             ))
           )}
         </div>
-        <Modal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          selectedNote={selectedNote}
-          newNoteTitle={newNoteTitle}
-          newNoteContent={newNoteContent}
-          handleAddNote={handleAddNoteClick}
-          handleDeleteNote={handleDeleteNote}
-          handleUpdateNote={handleUpdateNote}
-        />
-        <ThemeToggleButton theme={theme} toggleTheme={toggleTheme} />
-      </header>
+        </header>
     </div>
   );
 }

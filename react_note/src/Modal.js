@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Modal = ({ showModal, setShowModal, selectedNote, newNoteTitle, newNoteContent, handleAddNote, handleDeleteNote, handleUpdateNote }) => {
+const Modal = ({ showModal, setShowModal, selectedNote, newNoteTitle, newNoteContent, handleAddNote, handleDeleteNote, handleUpdateNote, notes, setNotes }) => {
   const [newTitle, setNewTitle] = useState("");
   const [newContent, setNewContent] = useState("");
 
@@ -21,8 +21,9 @@ const Modal = ({ showModal, setShowModal, selectedNote, newNoteTitle, newNoteCon
                 value={newContent}
                 onChange={(e) => setNewContent(e.target.value)}
               />
-              <button onClick={handleUpdateNote}>Modifier</button>
-              <button onClick={handleDeleteNote}>Supprimer</button>
+              <button onClick={() => handleUpdateNote(selectedNote, newNoteTitle, newNoteContent, notes, setNotes, setShowModal)}>Modifier</button>
+              <button onClick={() => handleDeleteNote(selectedNote, setNotes, setShowModal)}>Supprimer</button>
+
             </div>
           ) : (
             <div>
