@@ -1,14 +1,40 @@
 import React, { useState } from "react";
 
-const Modal = ({ showModal, setShowModal, selectedNote, newNoteTitle, newNoteContent, handleAddNote, handleDeleteNote, handleUpdateNote, notes, setNotes }) => {
+const Modal = ({ showModal, setShowModal, selectedNote, handleAddNote, handleDeleteNote, handleUpdateNote, notes, setNotes }) => {
   const [newTitle, setNewTitle] = useState("");
   const [newContent, setNewContent] = useState("");
+
+  const handleAddNoteClick = () => {
+    // Vérifiez si les champs titre et contenu ne sont pas vides avant d'ajouter la note
+    if (newTitle.trim() !== "" && newContent.trim() !== "") {
+      handleAddNote(newTitle, newContent);
+      // Réinitialisez les champs après l'ajout de la note
+      setNewTitle("");
+      setNewContent("");
+      setShowModal(false);
+    } else {
+      // Gérez le cas où l'utilisateur n'a pas rempli tous les champs
+      alert("Veuillez remplir tous les champs avant d'ajouter une note.");
+    }
+  };
+
+  const handleUpdateNoteClick = () => {
+    // Ajoutez la logique pour mettre à jour la note sélectionnée
+    handleUpdateNote(selectedNote);
+    setShowModal(false);
+  };
+
+  const handleDeleteNoteClick = () => {
+    // Ajoutez la logique pour supprimer la note sélectionnée
+    handleDeleteNote(selectedNote);
+    setShowModal(false);
+  };
 
   return (
     showModal && (
       <div className="modal">
         <div className="modal-content">
-          {selectedNote ? (
+          {!selectedNote ? (
             <div>
               <input
                 type="text"
@@ -21,24 +47,23 @@ const Modal = ({ showModal, setShowModal, selectedNote, newNoteTitle, newNoteCon
                 value={newContent}
                 onChange={(e) => setNewContent(e.target.value)}
               />
-              <button onClick={() => handleUpdateNote(selectedNote, newNoteTitle, newNoteContent, notes, setNotes, setShowModal)}>Modifier</button>
-              <button onClick={() => handleDeleteNote(selectedNote, setNotes, setShowModal)}>Supprimer</button>
-
+              <button onClick={handleAddNoteClick}>Ajouter</button>
             </div>
           ) : (
             <div>
               <input
                 type="text"
                 placeholder="Titre de la note"
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
+                value={selectedNote.title}
+                readOnly
               />
               <textarea
                 placeholder="Contenu de la note"
-                value={newContent}
-                onChange={(e) => setNewContent(e.target.value)}
+                value={selectedNote.content}
+                readOnly
               />
-              <button onClick={handleAddNote}>Ajouter</button>
+              <button onClick={() => handleUpdateNote(selectedNote)}>Modifier</button>
+              <button onClick={() => handleDeleteNote(selectedNote)}>Supprimer</button>
             </div>
           )}
           <button onClick={() => setShowModal(false)}>Fermer</button>
@@ -49,3 +74,4 @@ const Modal = ({ showModal, setShowModal, selectedNote, newNoteTitle, newNoteCon
 };
 
 export default Modal;
+

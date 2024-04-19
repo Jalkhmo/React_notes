@@ -34,27 +34,30 @@ export const handleDeleteNote = async (selectedNote, setNotes, setShowModal) => 
     }
   };  
 
-export const handleAddNote = async (newNoteTitle, newNoteContent, setNotes, setShowModal, setNewNoteTitle, setNewNoteContent) => {
-  try {
-    const response = await fetch("/notes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: newNoteTitle,
-        content: newNoteContent
-      }),
-    });
-    const data = await response.json();
-    setNotes(prevNotes => [data, ...prevNotes]);
-    setShowModal(false);
-    setNewNoteTitle("");
-    setNewNoteContent("");
-  } catch (error) {
-    console.error('Erreur lors de l\'ajout de la nouvelle note :', error);
-  }
-};
+  export const handleAddNote = async (newNoteTitle, newNoteContent, setNotes, setShowModal, setNewNoteTitle, setNewNoteContent) => {
+    try {
+      const response = await fetch(`/notes`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title: newNoteTitle, content: newNoteContent }),
+      });
+      if (!response.ok) {
+        throw new Error("Erreur, la nouvelle note n'est pas ajoutée");
+      }
+      // Mettez à jour l'état des notes en ajoutant la nouvelle note à la liste existante
+      const newNote = await response.json();
+      setNotes(prevNotes => [...prevNotes, newNote]);
+      setShowModal(false);
+      setNewNoteTitle("");
+      setNewNoteContent("");
+    } catch (error) {
+      console.error('Erreur lors de l\'ajout de la note :', error);
+      throw error;
+    }
+  };
+  
 
 export const handleUpdateNote = async (selectedNote, newNoteTitle, newNoteContent, notes, setNotes, setShowModal) => {
     try {
@@ -77,4 +80,23 @@ export const handleUpdateNote = async (selectedNote, newNoteTitle, newNoteConten
       console.error('Erreur lors de la mise à jour de la note :', error);
     }
   };
+
+  export const updateNoteCompletion = async (noteId, completed) => {
+    try {
+      const response = await fetch(`/notes/${noteId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ completed }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update note completion");
+      }
+    } catch (error) {
+      console.error('Error updating note completion:', error);
+      throw error;
+    }
+  };  
+  
   

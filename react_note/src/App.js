@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Profiler } from "react";
 import './App.css';
 import './AppB.css';
 import Note from "./Note";
 import Modal from "./Modal";
-import utils from "./utils"; // eslint-disable-line no-unused-vars
-import { handleDeleteNote } from "./utils";
-import SearchBar from "./SearchBar"; // eslint-disable-line no-unused-vars
+import SearchBar from "./SearchBar"; 
 import ThemeToggleButton from "./ThemeToggleButton";
-import { fetchNotes, handleSearch, handleClearSearch, handleAddNote } from "./utils";
+import { fetchNotes, handleSearch, handleClearSearch, handleDeleteNote, handleDeleteNoteclick, handleAddNote, handleUpdateNote, handleUpdateNoteclick } from "./utils";
+import StatusBar from "./StatusBar";
 
 function App() {
   const [notes, setNotes] = useState(null);
@@ -19,10 +18,25 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredNotes, setFilteredNotes] = useState([]);
   const [theme, setTheme] = useState('light');
-  
+  const [setErrorMessage] = useState("");
+  const [userName, setUserName] = useState("");
+
 
   useEffect(() => {
-    fetchNotes(setNotes, setLoading);
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/profile');
+        if (!response.ok) {
+          throw new Error('Failed to fetch user profile');
+        }
+        const userProfile = await response.json();
+        setUserName(userProfile.profile.name); // Mettez à jour le nom de l'utilisateur
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
+
+    fetchUserProfile();
   }, []);
 
   const toggleTheme = () => {
@@ -42,39 +56,42 @@ function App() {
   };
 
   const handleAddNoteClick = () => {
-    handleAddNote(newNoteTitle, newNoteContent, setNotes, setShowModal, setNewNoteTitle, setNewNoteContent);
+    handleAddNote(newNoteTitle, newNoteContent, setNotes, setShowModal, setNewNoteTitle, setNewNoteContent)
+      .catch(error => setErrorMessage(`Erreur lors de l'ajout de la note : ${error.message}`));
+  };  
+
+  const handleUpdateNoteclick = () => {
+    handleUpdateNote(selectedNote, newNoteTitle, newNoteContent, notes, setNotes, setShowModal)
+      .catch(error => setErrorMessage(`Erreur lors de la modification de la note : ${error.message}`));
+  };
+
+  const handleDeleteNoteclick = () => {
+    handleDeleteNote(selectedNote, setNotes, setShowModal)
+      .catch(error => setErrorMessage(`Erreur lors de la suppression de la note : ${error.message}`));
   };
   
-  const handleUpdateNote = () => {
-    handleUpdateNote(selectedNote, newNoteTitle, newNoteContent, notes, setNotes, setShowModal);
-  }
 
   return (
     <div className={`App ${theme === 'dark' ? 'dark-theme' : ''}`}>
       <header className="App-header">
         <br />
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Mots clé :"
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
-          {searchTerm && (
-            <button className="clear-button" onClick={handleClearClick}>X</button>
-          )}
-          <button className="search-button" onClick={handleSearchClick}>Rechercher</button>
-        </div>
+        <StatusBar userName={userName} />
+        <SearchBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          handleSearch={handleSearchClick}
+          handleClearSearch={handleClearClick}
+        />
         <br />
         <Modal
           showModal={showModal}
           setShowModal={setShowModal}
           selectedNote={selectedNote}
-          newNoteTitle={newNoteTitle}
-          newNoteContent={newNoteContent}
-          handleAddNote={handleAddNoteClick}
+          handleAddNote={handleAddNote}
           handleDeleteNote={handleDeleteNote}
           handleUpdateNote={handleUpdateNote}
+          notes={notes}
+          setNotes={setNotes}
         />
         <ThemeToggleButton theme={theme} toggleTheme={toggleTheme} />
       
@@ -87,7 +104,8 @@ function App() {
               setShowModal={setShowModal}
               setNewNoteTitle={setNewNoteTitle}
               setNewNoteContent={setNewNoteContent}
-            />
+              searchTerm={searchTerm}
+          />
           ))}
         </div>
         <div className="sidebar">

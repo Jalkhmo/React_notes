@@ -192,3 +192,20 @@ button:hover{
   font-weight: bold;
   color: #b03bef;
 }
+
+.completion-button {
+  padding: 5px 10px; 
+  border-radius: 4px; /* Coins arrondis */
+  cursor: pointer; /* Curseur de la souris en forme de main */
+}
+
+.completion-button.completed {
+  background-color: #5cb85c; 
+  color: #f9f9f9; 
+}
+
+.completion-button.not-completed {
+  background-color: #d9534f; 
+  color: #f9f9f9; 
+}
+
